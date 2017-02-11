@@ -14,7 +14,8 @@
     "start": "node tasks/serve.js",
     "pretest": "eslint tasks test test_rendering src examples",
     "test": "node tasks/test.js",
-    "debug-server": "node tasks/serve-lib.js"
+    "debug-server": "node tasks/serve-lib.js",
+    "autorouter": "node tasks/build.js config/autorouter.json dist/ol.js"
   },
   "main": "dist/ol.js",
   "repository": {

@@ -72,6 +72,7 @@ ol.render.Feature.prototype.get = function(key) {
 
 /**
  * @return {Array.<number>|Array.<Array.<number>>} Ends or endss.
+ * @api
  */
 ol.render.Feature.prototype.getEnds = function() {
   return this.ends_;
@@ -105,6 +106,7 @@ ol.render.Feature.prototype.getOrientedFlatCoordinates = function() {
 
 /**
  * @return {Array.<number>} Flat coordinates.
+ * @api
  */
 ol.render.Feature.prototype.getFlatCoordinates =
     ol.render.Feature.prototype.getOrientedFlatCoordinates;
