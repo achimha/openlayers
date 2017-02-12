@@ -16,6 +16,11 @@
     "ol.Map#setView",
     "ol.Map#addLayer",
     "ol.Map#setProperties",
+    "ol.Map#addControl",
+    "ol.Map#removeControl",
+    "ol.Map#addInteraction",
+    "ol.Map#removeInteraction",
+    "ol.Map#removeLayer",
 
     "ol.View",
     "ol.View#getZoom",
