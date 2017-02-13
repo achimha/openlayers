@@ -39,6 +39,9 @@
     "ol.has.DEVICE_PIXEL_RATIO",
     "ol.Attribution",
     "ol.layer.Vector",
+
+    "ol.layer.Vector#setSource",
+
     "ol.layer.Tile",
     "ol.layer.Tile#getVisible",
     "ol.layer.Tile#setVisible",
