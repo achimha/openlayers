@@ -304,8 +304,8 @@ build/test_rendering_requires.js: $(SPEC_RENDERING_JS)
 
 .PHONY: package
 package:
-	@rm -rf build/package
-	@cp -r package build
-	@cd ./src && cp -r ol/* ../build/package
-	@rm build/package/typedefs.js
-	./node_modules/.bin/jscodeshift --transform transforms/module.js build/package
+	@rm -rf dist/package
+	@cp -r package dist
+	@cd ./src && cp -r ol/* ../dist/package
+	@rm dist/package/typedefs.js
+	./node_modules/.bin/jscodeshift --transform transforms/module.js dist/package
