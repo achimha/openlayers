@@ -114,6 +114,7 @@
     "ol.coordinate.toStringHDMS",
     "ol.interaction.defaults",
     "ol.interaction.DragRotateAndZoom",
+    "ol.interaction.DragZoom",
     "ol.Collection#extend",
     "ol.Feature",
     "ol.Feature#setStyle",

@@ -1,6 +1,6 @@
 // OpenLayers. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/openlayers/master/LICENSE.md
-// Version: v3.20.0-368-g1d44a4a
+// Version: v3.20.0-369-gf30b4742c
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -411,7 +411,7 @@ r("ol.layer.VectorTile",Ym);Ym.prototype.getVisible=Ym.prototype.f;Ym.prototype.
 r("ol.source.BingMaps",sn);r("ol.source.XYZ",un);Dm.prototype.setAttributions=Dm.prototype.S;r("ol.format.MVT",Ck);r("ol.tilegrid.createXYZ",Pb);r("ol.proj.get",nb);r("ol.proj.fromLonLat",function(a,b){return yb(a,"EPSG:4326",void 0!==b?b:"EPSG:3857")});r("ol.proj.toLonLat",function(a,b){return yb(a,void 0!==b?b:"EPSG:3857","EPSG:4326")});r("ol.proj.transform",yb);r("ol.proj.transformExtent",zb);eb.prototype.getExtent=eb.prototype.I;eb.prototype.getCode=eb.prototype.i;r("ol.source.VectorTile",zn);
 r("ol.style.Style",Bh);Bh.prototype.getText=Bh.prototype.ja;Bh.prototype.setText=Bh.prototype.Gc;Bh.prototype.setGeometry=Bh.prototype.fb;r("ol.style.Stroke",Mg);Mg.prototype.setColor=Mg.prototype.i;r("ol.style.Text",Yi);Yi.prototype.getText=Yi.prototype.ja;Yi.prototype.setText=Yi.prototype.Gc;Yi.prototype.setFont=Yi.prototype.vf;Yi.prototype.setOffsetY=Yi.prototype.wf;Yi.prototype.setRotation=Yi.prototype.We;r("ol.style.Fill",Ah);Ah.prototype.setColor=Ah.prototype.b;r("ol.style.Icon",Xi);
 r("ol.style.Circle",zh);r("ol.style.RegularShape",yh);r("ol.control.Control",J);r("ol.control.defaults",Lc);r("ol.control.MousePosition",Sc);r("ol.control.Attribution",yc);r("ol.control.FullScreen",Mc);r("ol.control.OverviewMap",hh);r("ol.control.Rotate",Ec);r("ol.control.ScaleLine",mh);r("ol.control.Zoom",Hc);r("ol.control.ZoomSlider",rh);r("ol.control.ZoomToExtent",wh);r("ol.coordinate.toStringHDMS",function(a,b){return a?$d(a[1],"NS",b)+" "+$d(a[0],"EW",b):""});r("ol.interaction.defaults",Nf);
-r("ol.interaction.DragRotateAndZoom",Il);jc.prototype.extend=jc.prototype.Pe;r("ol.Feature",Gh);Gh.prototype.setStyle=Gh.prototype.ld;Bk.prototype.getGeometry=Bk.prototype.Y;Bk.prototype.getFlatCoordinates=Bk.prototype.V;Bk.prototype.getEnds=Bk.prototype.Ia;r("ol.geom.Point",qe);r("ol.geom.LineString",bi);bi.prototype.transform=bi.prototype.s;r("ol.geom.Polygon",xe);r("ol.Sphere",ab);ab.prototype.offset=ab.prototype.offset;r("ol.extent.extend",Ja);
+r("ol.interaction.DragRotateAndZoom",Il);r("ol.interaction.DragZoom",wf);jc.prototype.extend=jc.prototype.Pe;r("ol.Feature",Gh);Gh.prototype.setStyle=Gh.prototype.ld;Bk.prototype.getGeometry=Bk.prototype.Y;Bk.prototype.getFlatCoordinates=Bk.prototype.V;Bk.prototype.getEnds=Bk.prototype.Ia;r("ol.geom.Point",qe);r("ol.geom.LineString",bi);bi.prototype.transform=bi.prototype.s;r("ol.geom.Polygon",xe);r("ol.Sphere",ab);ab.prototype.offset=ab.prototype.offset;r("ol.extent.extend",Ja);
   return OPENLAYERS.ol;
 }));
 
