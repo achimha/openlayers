@@ -122,6 +122,7 @@
     "ol.render.Feature#getFlatCoordinates",
     "ol.render.Feature#getEnds",
     "ol.geom.Point",
+    "ol.geom.Point#getType",
     "ol.geom.LineString",
     "ol.geom.LineString#transform",
     "ol.geom.Polygon",
