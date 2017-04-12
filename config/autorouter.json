@@ -125,6 +125,7 @@
     "ol.geom.LineString",
     "ol.geom.LineString#transform",
     "ol.geom.Polygon",
+    "ol.geom.Polygon#getType",
     "ol.Sphere",
     "ol.Sphere#offset",
     "ol.extent.extend"
