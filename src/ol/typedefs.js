@@ -254,6 +254,15 @@ ol.FeatureUrlFunction;
 
 
 /**
+ * @typedef {{
+ *     geom: ol.geom.Point,
+ *     text: string
+ * }}
+ */
+ol.GraticuleLabelDataType;
+
+
+/**
  * A function that is called to trigger asynchronous canvas drawing.  It is
  * called with a "done" callback that should be called when drawing is done.
  * If any error occurs during drawing, the "done" callback should be called with
@@ -440,6 +449,15 @@ ol.RasterOperation;
  * }}
  */
 ol.RegularShapeRenderOptions;
+
+
+/**
+ * A function to be used when sorting features before rendering.
+ * It takes two instances of {@link ol.Feature} and returns a `{number}`.
+ *
+ * @typedef {function(ol.Feature, ol.Feature):number}
+ */
+ol.RenderOrderFunction;
 
 
 /**
@@ -631,7 +649,7 @@ ol.TilePriorityFunction;
 /**
  * @typedef {{
  *     dirty: boolean,
- *     renderedRenderOrder: (null|function(ol.Feature, ol.Feature):number),
+ *     renderedRenderOrder: (null|ol.RenderOrderFunction),
  *     renderedTileRevision: number,
  *     renderedRevision: number,
  *     replayGroup: ol.render.ReplayGroup}}
