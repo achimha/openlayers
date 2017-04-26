@@ -2,6 +2,7 @@ goog.provide('ol.format.WFS');
 
 goog.require('ol');
 goog.require('ol.asserts');
+goog.require('ol.format.GML2');
 goog.require('ol.format.GML3');
 goog.require('ol.format.GMLBase');
 goog.require('ol.format.filter');
@@ -53,7 +54,8 @@ ol.format.WFS = function(opt_options) {
    * @type {string}
    */
   this.schemaLocation_ = options.schemaLocation ?
-      options.schemaLocation : ol.format.WFS.SCHEMA_LOCATION;
+      options.schemaLocation :
+          ol.format.WFS.SCHEMA_LOCATIONS[ol.format.WFS.DEFAULT_VERSION];
 
   ol.format.XMLFeature.call(this);
 };
@@ -90,10 +92,21 @@ ol.format.WFS.WFSNS = 'http://www.opengis.net/wfs';
 
 /**
  * @const
+ * @type {Object.<string, string>}
+ */
+ol.format.WFS.SCHEMA_LOCATIONS = {
+  '1.1.0': 'http://www.opengis.net/wfs ' +
+      'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd',
+  '1.0.0': 'http://www.opengis.net/wfs ' +
+      'http://schemas.opengis.net/wfs/1.0.0/wfs.xsd'
+};
+
+
+/**
+ * @const
  * @type {string}
  */
-ol.format.WFS.SCHEMA_LOCATION = 'http://www.opengis.net/wfs ' +
-    'http://schemas.opengis.net/wfs/1.1.0/wfs.xsd';
+ol.format.WFS.DEFAULT_VERSION = '1.1.0';
 
 
 /**
@@ -360,9 +373,14 @@ ol.format.WFS.writeFeature_ = function(node, feature, objectStack) {
   var context = objectStack[objectStack.length - 1];
   var featureType = context['featureType'];
   var featureNS = context['featureNS'];
+  var gmlVersion = context['gmlVersion'];
   var child = ol.xml.createElementNS(featureNS, featureType);
   node.appendChild(child);
-  ol.format.GML3.prototype.writeFeatureElement(child, feature, objectStack);
+  if (gmlVersion === 2) {
+    ol.format.GML2.prototype.writeFeatureElement(child, feature, objectStack);
+  } else {
+    ol.format.GML3.prototype.writeFeatureElement(child, feature, objectStack);
+  }
 };
 
 
@@ -382,6 +400,25 @@ ol.format.WFS.writeOgcFidFilter_ = function(node, fid, objectStack) {
 
 
 /**
+ * @param {string|undefined} featurePrefix The prefix of the feature.
+ * @param {string} featureType The type of the feature.
+ * @returns {string} The value of the typeName property.
+ * @private
+ */
+ol.format.WFS.getTypeName_ = function(featurePrefix, featureType) {
+  featurePrefix = featurePrefix ? featurePrefix :
+      ol.format.WFS.FEATURE_PREFIX;
+  var prefix = featurePrefix + ':';
+  // The featureType already contains the prefix.
+  if (featureType.indexOf(prefix) === 0) {
+    return featureType;
+  } else {
+    return prefix + featureType;
+  }
+};
+
+
+/**
  * @param {Node} node Node.
  * @param {ol.Feature} feature Feature.
  * @param {Array.<*>} objectStack Node stack.
@@ -392,10 +429,9 @@ ol.format.WFS.writeDelete_ = function(node, feature, objectStack) {
   ol.asserts.assert(feature.getId() !== undefined, 26); // Features must have an id set
   var featureType = context['featureType'];
   var featurePrefix = context['featurePrefix'];
-  featurePrefix = featurePrefix ? featurePrefix :
-      ol.format.WFS.FEATURE_PREFIX;
   var featureNS = context['featureNS'];
-  node.setAttribute('typeName', featurePrefix + ':' + featureType);
+  var typeName = ol.format.WFS.getTypeName_(featurePrefix, featureType);
+  node.setAttribute('typeName', typeName);
   ol.xml.setAttributeNS(node, ol.format.WFS.XMLNS, 'xmlns:' + featurePrefix,
       featureNS);
   var fid = feature.getId();
@@ -416,10 +452,9 @@ ol.format.WFS.writeUpdate_ = function(node, feature, objectStack) {
   ol.asserts.assert(feature.getId() !== undefined, 27); // Features must have an id set
   var featureType = context['featureType'];
   var featurePrefix = context['featurePrefix'];
-  featurePrefix = featurePrefix ? featurePrefix :
-      ol.format.WFS.FEATURE_PREFIX;
   var featureNS = context['featureNS'];
-  node.setAttribute('typeName', featurePrefix + ':' + featureType);
+  var typeName = ol.format.WFS.getTypeName_(featurePrefix, featureType);
+  node.setAttribute('typeName', typeName);
   ol.xml.setAttributeNS(node, ol.format.WFS.XMLNS, 'xmlns:' + featurePrefix,
       featureNS);
   var fid = feature.getId();
@@ -433,7 +468,8 @@ ol.format.WFS.writeUpdate_ = function(node, feature, objectStack) {
       }
     }
     ol.xml.pushSerializeAndPop(/** @type {ol.XmlNodeStackItem} */ (
-        {node: node, 'srsName': context['srsName']}),
+      {'gmlVersion': context['gmlVersion'], node: node,
+        'hasZ': context['hasZ'], 'srsName': context['srsName']}),
         ol.format.WFS.TRANSACTION_SERIALIZERS_,
         ol.xml.makeSimpleNodeFactory('Property'), values,
         objectStack);
@@ -450,14 +486,21 @@ ol.format.WFS.writeUpdate_ = function(node, feature, objectStack) {
  */
 ol.format.WFS.writeProperty_ = function(node, pair, objectStack) {
   var name = ol.xml.createElementNS(ol.format.WFS.WFSNS, 'Name');
+  var context = objectStack[objectStack.length - 1];
+  var gmlVersion = context['gmlVersion'];
   node.appendChild(name);
   ol.format.XSD.writeStringTextNode(name, pair.name);
   if (pair.value !== undefined && pair.value !== null) {
     var value = ol.xml.createElementNS(ol.format.WFS.WFSNS, 'Value');
     node.appendChild(value);
     if (pair.value instanceof ol.geom.Geometry) {
-      ol.format.GML3.prototype.writeGeometryElement(value,
-          pair.value, objectStack);
+      if (gmlVersion === 2) {
+        ol.format.GML2.prototype.writeGeometryElement(value,
+            pair.value, objectStack);
+      } else {
+        ol.format.GML3.prototype.writeGeometryElement(value,
+            pair.value, objectStack);
+      }
     } else {
       ol.format.XSD.writeStringTextNode(value, pair.value);
     }
@@ -512,8 +555,14 @@ ol.format.WFS.writeQuery_ = function(node, featureType, objectStack) {
   var featureNS = context['featureNS'];
   var propertyNames = context['propertyNames'];
   var srsName = context['srsName'];
-  var prefix = featurePrefix ? featurePrefix + ':' : '';
-  node.setAttribute('typeName', prefix + featureType);
+  var typeName;
+  // If feature prefix is not defined, we must not use the default prefix.
+  if (featurePrefix) {
+    typeName = ol.format.WFS.getTypeName_(featurePrefix, featureType);
+  } else {
+    typeName = featureType;
+  }
+  node.setAttribute('typeName', typeName);
   if (srsName) {
     node.setAttribute('srsName', srsName);
   }
@@ -757,6 +806,20 @@ ol.format.WFS.GETFEATURE_SERIALIZERS_ = {
 
 
 /**
+ * Encode filter as WFS `Filter` and return the Node.
+ *
+ * @param {ol.format.filter.Filter} filter Filter.
+ * @return {Node} Result.
+ * @api
+ */
+ol.format.WFS.writeFilter = function(filter) {
+  var child = ol.xml.createElementNS(ol.format.WFS.OGCNS, 'Filter');
+  ol.format.WFS.writeFilterCondition_(child, filter, []);
+  return child;
+};
+
+
+/**
  * @param {Node} node Node.
  * @param {Array.<string>} featureTypes Feature types.
  * @param {Array.<*>} objectStack Node stack.
@@ -851,8 +914,11 @@ ol.format.WFS.prototype.writeTransaction = function(inserts, updates, deletes,
     options) {
   var objectStack = [];
   var node = ol.xml.createElementNS(ol.format.WFS.WFSNS, 'Transaction');
+  var version = options.version ?
+        options.version : ol.format.WFS.DEFAULT_VERSION;
+  var gmlVersion = version === '1.0.0' ? 2 : 3;
   node.setAttribute('service', 'WFS');
-  node.setAttribute('version', '1.1.0');
+  node.setAttribute('version', version);
   var baseObj;
   /** @type {ol.XmlNodeStackItem} */
   var obj;
@@ -862,12 +928,13 @@ ol.format.WFS.prototype.writeTransaction = function(inserts, updates, deletes,
       node.setAttribute('handle', options.handle);
     }
   }
+  var schemaLocation = ol.format.WFS.SCHEMA_LOCATIONS[version];
   ol.xml.setAttributeNS(node, 'http://www.w3.org/2001/XMLSchema-instance',
-      'xsi:schemaLocation', this.schemaLocation_);
+      'xsi:schemaLocation', schemaLocation);
   if (inserts) {
     obj = {node: node, 'featureNS': options.featureNS,
       'featureType': options.featureType, 'featurePrefix': options.featurePrefix,
-      'srsName': options.srsName};
+      'gmlVersion': gmlVersion, 'hasZ': options.hasZ, 'srsName': options.srsName};
     ol.obj.assign(obj, baseObj);
     ol.xml.pushSerializeAndPop(obj,
         ol.format.WFS.TRANSACTION_SERIALIZERS_,
@@ -877,7 +944,7 @@ ol.format.WFS.prototype.writeTransaction = function(inserts, updates, deletes,
   if (updates) {
     obj = {node: node, 'featureNS': options.featureNS,
       'featureType': options.featureType, 'featurePrefix': options.featurePrefix,
-      'srsName': options.srsName};
+      'gmlVersion': gmlVersion, 'hasZ': options.hasZ, 'srsName': options.srsName};
     ol.obj.assign(obj, baseObj);
     ol.xml.pushSerializeAndPop(obj,
         ol.format.WFS.TRANSACTION_SERIALIZERS_,
@@ -887,7 +954,7 @@ ol.format.WFS.prototype.writeTransaction = function(inserts, updates, deletes,
   if (deletes) {
     ol.xml.pushSerializeAndPop({node: node, 'featureNS': options.featureNS,
       'featureType': options.featureType, 'featurePrefix': options.featurePrefix,
-      'srsName': options.srsName},
+      'gmlVersion': gmlVersion, 'srsName': options.srsName},
     ol.format.WFS.TRANSACTION_SERIALIZERS_,
     ol.xml.makeSimpleNodeFactory('Delete'), deletes,
     objectStack);
@@ -895,7 +962,7 @@ ol.format.WFS.prototype.writeTransaction = function(inserts, updates, deletes,
   if (options.nativeElements) {
     ol.xml.pushSerializeAndPop({node: node, 'featureNS': options.featureNS,
       'featureType': options.featureType, 'featurePrefix': options.featurePrefix,
-      'srsName': options.srsName},
+      'gmlVersion': gmlVersion, 'srsName': options.srsName},
     ol.format.WFS.TRANSACTION_SERIALIZERS_,
     ol.xml.makeSimpleNodeFactory('Native'), options.nativeElements,
     objectStack);
