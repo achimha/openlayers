@@ -129,7 +129,9 @@
     "ol.geom.Polygon#getType",
     "ol.Sphere",
     "ol.Sphere#offset",
-    "ol.extent.extend"
+
+    "ol.extent.extend",
+    "ol.extent.boundingExtent"
   ],
   "umd": true,
   "compile": {

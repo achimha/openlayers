@@ -1,6 +1,6 @@
 // OpenLayers. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/openlayers/master/LICENSE.md
-// Version: v3.20.0-662-gf19f4e1f3
+// Version: v3.20.0-663-gc23d5ad93
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -411,7 +411,7 @@ r("ol.source.BingMaps",rn);r("ol.source.XYZ",tn);Em.prototype.setAttributions=Em
 r("ol.style.Style",Bh);Bh.prototype.getText=Bh.prototype.ha;Bh.prototype.setText=Bh.prototype.Jc;Bh.prototype.setGeometry=Bh.prototype.cb;r("ol.style.Stroke",Og);Og.prototype.setColor=Og.prototype.j;r("ol.style.Text",Yi);Yi.prototype.getText=Yi.prototype.ha;Yi.prototype.setText=Yi.prototype.Jc;Yi.prototype.setFont=Yi.prototype.yf;Yi.prototype.setOffsetY=Yi.prototype.zf;Yi.prototype.setRotation=Yi.prototype.Ze;r("ol.style.Fill",Ah);Ah.prototype.setColor=Ah.prototype.b;r("ol.style.Icon",Xi);
 r("ol.style.Circle",zh);r("ol.style.RegularShape",yh);r("ol.control.Control",J);r("ol.control.defaults",Xc);r("ol.control.MousePosition",dd);r("ol.control.Attribution",Kc);r("ol.control.FullScreen",Yc);r("ol.control.OverviewMap",hh);r("ol.control.Rotate",Qc);r("ol.control.ScaleLine",mh);r("ol.control.Zoom",Tc);r("ol.control.ZoomSlider",rh);r("ol.control.ZoomToExtent",wh);r("ol.coordinate.toStringHDMS",function(a,b){return a?me("NS",a[1],b)+" "+me("EW",a[0],b):""});r("ol.interaction.defaults",ag);
 r("ol.interaction.DragRotateAndZoom",Jl);r("ol.interaction.DragZoom",Kf);uc.prototype.extend=uc.prototype.Ue;r("ol.Feature",Gh);Gh.prototype.setStyle=Gh.prototype.rd;Bk.prototype.getGeometry=Bk.prototype.Y;Bk.prototype.getFlatCoordinates=Bk.prototype.V;Bk.prototype.getEnds=Bk.prototype.Ha;r("ol.geom.Point",De);De.prototype.getType=De.prototype.U;r("ol.geom.LineString",bi);bi.prototype.transform=bi.prototype.s;r("ol.geom.Polygon",Ke);Ke.prototype.getType=Ke.prototype.U;r("ol.Sphere",$a);
-$a.prototype.offset=$a.prototype.offset;r("ol.extent.extend",Ja);
+$a.prototype.offset=$a.prototype.offset;r("ol.extent.extend",Ja);r("ol.extent.boundingExtent",xa);
   return OPENLAYERS.ol;
 }));
 
